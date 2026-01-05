@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "task-manager"
         JAR_NAME = "task-manager-0.0.1-SNAPSHOT.jar"
         APP_DIR  = "/home/ec2-user"
+        LOG_FILE = "/home/ec2-user/app.log"
     }
 
     stages {
@@ -26,14 +26,14 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh """
-                echo "Stopping old application if running..."
-                pkill -f ${APP_NAME} || true
+                echo "Stopping old application..."
+                pkill -f ${JAR_NAME} || true
 
-                echo "Copying new jar..."
+                echo "Deploying new JAR..."
                 cp target/${JAR_NAME} ${APP_DIR}
 
                 echo "Starting application..."
-                nohup java -jar ${APP_DIR}/${JAR_NAME} > ${APP_DIR}/app.log 2>&1 &
+                nohup java -jar ${APP_DIR}/${JAR_NAME} > ${LOG_FILE} 2>&1 &
                 """
             }
         }
