@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-
+@Table(name = "task", uniqueConstraints = @UniqueConstraint(columnNames = "title"))
 public class Task {
 
 	@Id

@@ -21,9 +21,13 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public Task createTask(Task task) {
-		task.setCreatedAt(LocalDateTime.now());
-		return taskRepository.save(task);
+	    if (taskRepository.existsByTitle(task.getTitle())) {
+	        throw new RuntimeException("Task already exists");
+	    }
+	    task.setCreatedAt(LocalDateTime.now());
+	    return taskRepository.save(task);
 	}
+
 
 	@Override
 	public List<Task> getAllTasks() {
